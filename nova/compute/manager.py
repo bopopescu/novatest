@@ -3927,7 +3927,7 @@ class ComputeManager(manager.SchedulerDependentManager):
                 self._set_instance_error_state(context, instance_uuid)
 
     @exception.wrap_exception(notifier=notifier, publisher_id=publisher_id())
-    def add_aggregate_host(self, context, host, slave_info=None,
+    def add_aggregate_host(self, context, host, subordinate_info=None,
                            aggregate=None, aggregate_id=None):
         """Notify hypervisor of change (for hypervisor pools)."""
         if not aggregate:
@@ -3935,7 +3935,7 @@ class ComputeManager(manager.SchedulerDependentManager):
 
         try:
             self.driver.add_to_aggregate(context, aggregate, host,
-                                         slave_info=slave_info)
+                                         subordinate_info=subordinate_info)
         except exception.AggregateError:
             with excutils.save_and_reraise_exception():
                 self.driver.undo_aggregate_operation(
@@ -3944,7 +3944,7 @@ class ComputeManager(manager.SchedulerDependentManager):
                                     aggregate, host)
 
     @exception.wrap_exception(notifier=notifier, publisher_id=publisher_id())
-    def remove_aggregate_host(self, context, host, slave_info=None,
+    def remove_aggregate_host(self, context, host, subordinate_info=None,
                               aggregate=None, aggregate_id=None):
         """Removes a host from a physical hypervisor pool."""
         if not aggregate:
@@ -3952,7 +3952,7 @@ class ComputeManager(manager.SchedulerDependentManager):
 
         try:
             self.driver.remove_from_aggregate(context, aggregate, host,
-                                              slave_info=slave_info)
+                                              subordinate_info=subordinate_info)
         except (exception.AggregateError,
                 exception.InvalidAggregateAction) as e:
             with excutils.save_and_reraise_exception():
